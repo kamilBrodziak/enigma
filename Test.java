@@ -36,11 +36,18 @@ public class Test
                     vig(args[0], args[2].toLowerCase(), message);
                     break;
                 case "POLYBIUS":
-                if (args.length < 3 || !isAlpha(args[2])) {
-                    System.out.println("You must give a key that contains only letters!");
-                    break;
-                }
-                poly(args[0], args[2].toLowerCase(), message);
+                    if (args.length < 3 || !isAlpha(args[2])) {
+                        System.out.println("You must give a key that contains only letters!");
+                        break;
+                    }
+                    poly(args[0], args[2].toLowerCase(), message);
+                        break;
+                case "RAILFENCE":
+                    if (args.length < 3 || !isNumeric(args[2])) {
+                        System.out.println("You must give a number key!");
+                        break;
+                    }
+                    rail(args[0], args[2] ,message);
                     break;
                 default:
                     System.out.println("There is no such option!");
@@ -91,4 +98,18 @@ public class Test
         else
             System.out.println("No such option, available: -d, -e!");
     }
+
+    private static void rail(String option, String key, String message) {
+        if (option.equals("-e")) {
+            System.out.println("Encrypted message: ");
+            Railfence.encrypt(Integer.parseInt(key), message);
+        }
+        else if(option.equals("-d")) {
+            System.out.println("Decrypted message: ");
+            Railfence.decrypt(Integer.parseInt(key), message);
+        }
+        else
+            System.out.println("No such option, available: -d, -e!");
+    }
+    
 }
