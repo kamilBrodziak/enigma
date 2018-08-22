@@ -49,6 +49,13 @@ public class Test
                     }
                     rail(args[0], args[2] ,message);
                     break;
+                case "BIFID":
+                    if (args.length < 4 || !isNumeric(args[3]) || !isAlpha(args[2])) {
+                        System.out.println("You must give a string key and then after space number key!");
+                        break;
+                    }
+                    bifid(args[0], args[2], args[3] ,message);
+                    break;
                 default:
                     System.out.println("There is no such option!");
             }
@@ -112,4 +119,19 @@ public class Test
             System.out.println("No such option, available: -d, -e!");
     }
     
+    private static void bifid(String option, String keyString, String keyCols, String message) {
+        message = message.replace(" ", "");
+        message = message.replace("j", "i").toLowerCase();
+
+        if (option.equals("-e")) {
+            System.out.println("Encrypted message: ");
+            Bifid.encrypt(message, keyString, Integer.parseInt(keyCols));
+        }
+        else if(option.equals("-d")) {
+            System.out.println("Decrypted message: ");
+            Bifid.decrypt(message, keyString, Integer.parseInt(keyCols));
+        }
+        else
+            System.out.println("No such option, available: -d, -e!");
+    }
 }
