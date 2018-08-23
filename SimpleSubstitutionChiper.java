@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 public class SimpleSubstitutionChiper{
-    private String alphabet = "abcdefghijklmnoprstuwxyz";
+    private String alphabet = "abcdefghijklmnopqrstuvwxyz";
     private String key;
     private String message;
     private String decision;    
@@ -19,10 +19,10 @@ public class SimpleSubstitutionChiper{
 
     SimpleSubstitutionChiper(String key, String message, String decision){
         // System.out.println("hi");
-        this.key=key;
+        this.key=generateAlph(key);
         this.message=message;
         this.decision=decision;
-        keyList=makeList(key);
+        keyList=makeList(this.key);
         messageList=makeList(message);
         alphabetList=makeList(alphabet);
 
@@ -34,7 +34,7 @@ public class SimpleSubstitutionChiper{
         // System.out.println(keyList);
         // System.out.println(messageList);
         // System.out.println(alphabetList);
-        if(decision=="c"){
+        if(decision.equals("-e")){
 
         
             for(char iterator: messageList){
@@ -48,7 +48,7 @@ public class SimpleSubstitutionChiper{
             
             }
         }
-        if(decision=="d"){
+        if(decision.equals("-d")){
             for(char iterator: messageList){
                 for(int searcher=0; searcher<alphabetList.size();searcher++){
                     if(iterator==keyList.get(searcher)){
@@ -66,13 +66,27 @@ public class SimpleSubstitutionChiper{
     System.out.println(enciperWord);
     return enciperWord;
 
-
     }
-    
+
+    private String addCharsToString(String key, String str) {
+        for(int i = 0; i < key.length(); ++i)
+            if (str.indexOf(key.charAt(i)) == -1)
+                str += key.charAt(i);
+        return str;
+    }
+
+    private String generateAlph(String key) {
+        String alp = "";
+        String alph = "abcdefghijklmnopqrstuvwxyz";
+        alp = addCharsToString(key, alp);
+        alp = addCharsToString(alph, alp);
+        return alp;
+    }
 
 
     public static void main(String[] args) {
-       SimpleSubstitutionChiper a = new SimpleSubstitutionChiper("tibhopnwxrjkduslmyzcefga","doyytno","d");
+       SimpleSubstitutionChiper a = new SimpleSubstitutionChiper("dupa","kbrrdeb","-d");
+       System.out.println(a.key);
        a.Encipher();
     }
 }
