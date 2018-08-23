@@ -56,6 +56,13 @@ public class Test
                     }
                     bifid(args[0], args[2], args[3] ,message);
                     break;
+                case "AFFINE":
+                if (args.length < 4 || !isNumeric(args[3]) || !isNumeric(args[2])) {
+                    System.out.println("You must give a number key(that must be relatively prime to 26) and then after space another number key!");
+                    break;
+                }
+                affine(args[0], args[2], args[3] ,message);
+                break;
                 default:
                     System.out.println("There is no such option!");
             }
@@ -130,6 +137,25 @@ public class Test
         else if(option.equals("-d")) {
             System.out.println("Decrypted message: ");
             Bifid.decrypt(message, keyString, Integer.parseInt(keyCols));
+        }
+        else
+            System.out.println("No such option, available: -d, -e!");
+    }
+
+    private static void affine(String option, String keyA, String keyB, String message) {
+        for (int i = 0; i < keyA.length(); ++i)
+            if (keyA.charAt(i) == '2' || keyA.charAt(i) == '6') {
+                System.out.println("First key and 26 must by relatively prime!");
+                return;
+            }
+
+        if (option.equals("-e")) {
+            System.out.println("Encrypted message: ");
+            Affine.encrypt(message, Integer.parseInt(keyA), Integer.parseInt(keyB));
+        }
+        else if(option.equals("-d")) {
+            System.out.println("Decrypted message: ");
+            Affine.decrypt(message, Integer.parseInt(keyA), Integer.parseInt(keyB));
         }
         else
             System.out.println("No such option, available: -d, -e!");
