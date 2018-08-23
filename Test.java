@@ -61,8 +61,15 @@ public class Test
                     System.out.println("You must give a number key(that must be relatively prime to 26) and then after space another number key!");
                     break;
                 }
+					
+						
+					
                 affine(args[0], args[2], args[3] ,message);
                 break;
+				case "FOUR":
+					System.out.println("Jestem tu");
+					FourSquareCipher a =new FourSquareCipher(args[0],args[2],args[3],args[4]);
+					break;
                 default:
                     System.out.println("There is no such option!");
             }

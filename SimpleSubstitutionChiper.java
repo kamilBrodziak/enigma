@@ -8,7 +8,7 @@ public class SimpleSubstitutionChiper{
     ArrayList<Character> messageList = new ArrayList<Character>();
     ArrayList<Character> alphabetList = new ArrayList<Character>();
 
-    public ArrayList<Character> makeList(String word){
+    public static ArrayList<Character> makeList(String word){
         ArrayList<Character> newList = new ArrayList<Character>();
         for(int i=0;i<word.length();i++){
             newList.add(word.charAt(i));
