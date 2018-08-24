@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import java.util.Arrays;
 
 public class Hill {
@@ -6,34 +7,40 @@ public class Hill {
 
     public static void encrypt(String key, String message) {
         double[][] matrixKey = transformKeyIntoMatrix(key);
-        if (matrixKey.length == 1 && matrixKey[0][0] == 0) {
-            System.out.println("Invalid matrix key, must be NxN!");
+
+        if (!isMatrixCorrect(matrixKey))
             return;
-        } else if (calculateDeterminant(matrixKey) == 0) {
-            System.out.println("Inappriopriate matrix! Determinant must be different from zero.");
-            return;
-        }
 
         int[][] matrixMessage = transformMessageIntoMatrixes(message, matrixKey.length);
         double[][] encryptedMatrixMessage = new double[matrixMessage.length][matrixKey.length];
         for(int i = 0; i < matrixMessage.length; ++i)
             encryptedMatrixMessage[i] = multiplyMatrixesD(matrixMessage[i], matrixKey);
-        
+
         String encryptedMessage = "";
         for(int i = 0; i < encryptedMatrixMessage.length; ++i)
             for(int j = 0; j < matrixKey.length; ++j)
-                encryptedMessage += (char)(encryptedMatrixMessage[i][j] + 65);
+                encryptedMessage += (char)(encryptedMatrixMessage[i][j] + ASCII_ALPH_START);
 
         System.out.println(encryptedMessage);
         
+    }
+
+    private static boolean isMatrixCorrect(double[][] matrixKey) {
+        if (matrixKey.length == 1 && matrixKey[0][0] == 0) {
+            System.out.println("Invalid matrix key, must be NxN!");
+            return false;
+        } else if (calculateDeterminant(matrixKey) == 0) {
+            System.out.println("Inappriopriate matrix! Determinant must be different from zero.");
+            return false;
+        }
+        return true;
     }
 
     private static double[][] transformKeyIntoMatrix(String key) {
         String[] matrixKey = key.split("-");
         int nLength = (int)Math.sqrt(matrixKey.length);
         if (nLength * nLength != matrixKey.length) {
-            double[][] tmp = new double[][]{{0}};
-            return tmp;
+            return new double[][]{{0}};
         }
         double[][] matrixIntKey = new double[nLength][nLength];
         for(int i = 0; i < matrixKey.length; ++i)
@@ -57,22 +64,18 @@ public class Hill {
         double[][] matrixKey = transformKeyIntoMatrix(key);
         double determinant = calculateDeterminant(matrixKey);
 
-        if (matrixKey.length == 1 && matrixKey[0][0] == 0) {
-            System.out.println("Invalid matrix key, must be NxN!");
+        if(!isMatrixCorrect(matrixKey))
             return;
-        } else if (determinant == 0) {
-            System.out.println("Inappriopriate matrix! Determinant must be different from zero.");
-            return;
-        }
 
         int[][] matrixMessage = transformMessageIntoMatrixes(message, matrixKey.length);
         double[][] inversedMatrixKey = invert(matrixKey);
-        int inverseDeterminantModulo = inverseA((int) determinant);
-        if (inverseDeterminantModulo == 0) {
-            System.out.println("Unfortunelty there is hard to find the inverse of modulo.");
+        int inverseDeterminantModulo;
+        try {
+            inverseDeterminantModulo = inverseA((int) determinant);
+        } catch (ArithmeticException e) {
+            System.out.println("determinant^-1%" + ALPH_LEN + " is not possible.");
             return;
         }
-
         double[][] encryptedMatrixMessage = new double[matrixMessage.length][matrixKey.length];
         for(int i = 0; i < matrixMessage.length; ++i)
             encryptedMatrixMessage[i] = multiplyMatrixesD(matrixMessage[i], inversedMatrixKey);
@@ -175,11 +178,11 @@ public class Hill {
         return (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]);
     }
 
-    private static int inverseA(int a) {
-        for(int i = ALPH_LEN; i >= -ALPH_LEN; --i)
-            if ((a * i) % ALPH_LEN == 1)
-                return i;
-        return 0;
+    private static int inverseA(int a) {         
+        BigInteger bi1, bi2;
+        bi1 = new BigInteger(a + "");
+        bi2 = new BigInteger(ALPH_LEN + "");
+        return Integer.parseInt(bi1.modInverse(bi2) + "");
     }
 
     public static void main(String[] args) {
