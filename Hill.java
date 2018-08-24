@@ -9,7 +9,7 @@ public class Hill {
         if (matrixKey.length == 1 && matrixKey[0][0] == 0) {
             System.out.println("Invalid matrix key, must be NxN!");
             return;
-        } else if (calculateDeterminant(0, matrixKey) == 0) {
+        } else if (calculateDeterminant(matrixKey) == 0) {
             System.out.println("Inappriopriate matrix! Determinant must be different from zero.");
             return;
         }
@@ -55,17 +55,18 @@ public class Hill {
 
     public static void decrypt(String key, String message) {
         double[][] matrixKey = transformKeyIntoMatrix(key);
+        double determinant = calculateDeterminant(matrixKey);
+
         if (matrixKey.length == 1 && matrixKey[0][0] == 0) {
             System.out.println("Invalid matrix key, must be NxN!");
             return;
-        } else if (calculateDeterminant(0, matrixKey) == 0) {
+        } else if (determinant == 0) {
             System.out.println("Inappriopriate matrix! Determinant must be different from zero.");
             return;
         }
 
         int[][] matrixMessage = transformMessageIntoMatrixes(message, matrixKey.length);
         double[][] inversedMatrixKey = invert(matrixKey);
-        double determinant = calculateDeterminant(0, matrixKey);
         int inverseDeterminantModulo = inverseA((int) determinant);
         if (inverseDeterminantModulo == 0) {
             System.out.println("Unfortunelty there is hard to find the inverse of modulo.");
@@ -142,7 +143,8 @@ public class Hill {
     }
 
 
-    private static double calculateDeterminant(int sum, double[][] matrix) {
+    private static double calculateDeterminant(double[][] matrix) {
+        int sum = 0;
         if(matrix.length == 1)
             return matrix[0][0];
         else if(matrix.length == 2)
@@ -162,11 +164,9 @@ public class Hill {
                     if (currCol == subMatrix.length) {
                         currCol = 0;
                         ++currRow;
-                        System.out.println();
                     }
             }
-            System.out.println();
-            sum += matrix[0][n] * Math.pow(-1, n/matrix.length + n%matrix.length) * calculateDeterminant(sum, subMatrix);
+            sum += matrix[0][n] * Math.pow(-1, n/matrix.length + n%matrix.length) * calculateDeterminant(subMatrix);
         }
         return sum;
     }
@@ -183,9 +183,11 @@ public class Hill {
     }
 
     public static void main(String[] args) {
-        // String matrix = "2-4-5-9-2-1-3-17-7";
-        String matrix = "2-6-8-1-4-6-7-2-1-3-4-5-7-2-1-5";
+        //String matrix = "2-4-5-9-2-1-3-17-7";
+        String matrix = "4-5-9-12-7-13-1-4-12-24-3-6-9-12-5-7";
+        // encrypt(matrix, "ATTACKATDAWN");
+        // decrypt(matrix, "PFOGOANPGXFX");
         encrypt(matrix, "ATTACKATDAWN");
-        decrypt(matrix, "PFOGOANPGXFX");
+        decrypt(matrix, "GGTLAMOLCRYU");
     }
 }
