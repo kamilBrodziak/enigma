@@ -63,6 +63,10 @@ public class Test
                     }
                     affine(args[0], args[2], args[3] ,message);
                     break;
+                case "FOUR":
+					System.out.println("Jestem tu");
+					FourSquareCipher a =new FourSquareCipher(args[0],args[2],args[3],args[4]);
+					break;
                 case "HILL":
                     if (args.length < 3 || isAlpha(args[2])) {
                         System.out.println("You must give a matrix key in this form: 1-2-4-17");
