@@ -57,12 +57,19 @@ public class Test
                     bifid(args[0], args[2], args[3] ,message);
                     break;
                 case "AFFINE":
-                if (args.length < 4 || !isNumeric(args[3]) || !isNumeric(args[2])) {
-                    System.out.println("You must give a number key(that must be relatively prime to 26) and then after space another number key!");
+                    if (args.length < 4 || !isNumeric(args[3]) || !isNumeric(args[2])) {
+                        System.out.println("You must give a number key(that must be relatively prime to 26) and then after space another number key!");
+                        break;
+                    }
+                    affine(args[0], args[2], args[3] ,message);
                     break;
-                }
-                affine(args[0], args[2], args[3] ,message);
-                break;
+                case "HILL":
+                    if (args.length < 3 || isAlpha(args[2])) {
+                        System.out.println("You must give a matrix key in this form: 1-2-4-17");
+                        break;
+                    }
+                    hill(args[0], args[2], message);
+                    break;
                 default:
                     System.out.println("There is no such option!");
             }
@@ -156,6 +163,20 @@ public class Test
         else if(option.equals("-d")) {
             System.out.println("Decrypted message: ");
             Affine.decrypt(message, Integer.parseInt(keyA), Integer.parseInt(keyB));
+        }
+        else
+            System.out.println("No such option, available: -d, -e!");
+    }
+
+    private static void hill(String option, String matrixKey, String message) {
+        
+        if (option.equals("-e")) {
+            System.out.println("Encrypted message: ");
+            Hill.encrypt(matrixKey, message.toUpperCase());
+        }
+        else if(option.equals("-d")) {
+            System.out.println("Decrypted message: ");
+            Hill.decrypt(matrixKey, message.toUpperCase());
         }
         else
             System.out.println("No such option, available: -d, -e!");
